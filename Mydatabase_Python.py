@@ -23,9 +23,21 @@ def connect():
     
     return con, err_msg
 
-# Add a new record to mytable
+# Add a new record to the appropriate table
 def add(con):
     cursor = con.cursor()
+    student_type = input("Enter student type (T for Transferee, A for Admitted, S for Shifter): ").upper()
+
+    if student_type == 'T':
+        table_name = 'transfer_students'
+    elif student_type == 'A':
+        table_name = 'admitted_students'
+    elif student_type == 'S':
+        table_name = 'shifters'
+    else:
+        print("Invalid student type. Please enter T, A, or S.")
+        return
+
     last_name = input("Enter Last Name: ")
     first_name = input("Enter First Name: ")
     middle_name = input("Enter Middle Name: ")
@@ -33,8 +45,8 @@ def add(con):
     course = input("Enter Course: ")
     year = int(input("Enter Year: "))
     
-    # Execute SQL to insert data into mytable
-    sql = "INSERT INTO mytable (last_name, first_name, middle_name, age, course, year) VALUES (%s, %s, %s, %s, %s, %s)"
+    # Execute SQL to insert data into the appropriate table
+    sql = f"INSERT INTO {table_name} (last_name, first_name, middle_name, age, course, year) VALUES (%s, %s, %s, %s, %s, %s)"
     val = (last_name, first_name, middle_name, age, course, year)
     
     cursor.execute(sql, val)
@@ -42,12 +54,24 @@ def add(con):
     
     print("Record Saved")
     cursor.close()
-
-# Search for a record in mytable
+    
+# Search for a record in the appropriate table
 def search(con):
     cursor = con.cursor()
+    student_type = input("Enter student type (T for Transferee, A for Admitted, S for Shifter): ").upper()
+
+    if student_type == 'T':
+        table_name = 'transfer_students'
+    elif student_type == 'A':
+        table_name = 'admitted_students'
+    elif student_type == 'S':
+        table_name = 'shifters'
+    else:
+        print("Invalid student type. Please enter T, A, or S.")
+        return
+
     code_to_search = int(input("Enter Student Code to Search: "))
-    sql = "SELECT * FROM mytable WHERE student_code = %s"
+    sql = f"SELECT * FROM {table_name} WHERE student_code = %s"
     cursor.execute(sql, (code_to_search,))
     records = cursor.fetchall()
 
@@ -59,9 +83,21 @@ def search(con):
             print(record)
     cursor.close()
 
-# Update a record in mytable
+# Update a record in the appropriate table
 def update(con):
     cursor = con.cursor()
+    student_type = input("Enter student type (T for Transferee, A for Admitted, S for Shifter): ").upper()
+
+    if student_type == 'T':
+        table_name = 'transfer_students'
+    elif student_type == 'A':
+        table_name = 'admitted_students'
+    elif student_type == 'S':
+        table_name = 'shifters'
+    else:
+        print("Invalid student type. Please enter T, A, or S.")
+        return
+
     code_to_update = int(input("Enter Student Code to Update: "))
 
     print("Select fields to update:")
@@ -101,24 +137,34 @@ def update(con):
         val.append(value)
     val.append(code_to_update)  # Add student code for WHERE clause
 
-    sql_update_query = f"UPDATE mytable SET {', '.join(sql_update_parts)} WHERE student_code = %s"
+    sql_update_query = f"UPDATE {table_name} SET {', '.join(sql_update_parts)} WHERE student_code = %s"
 
-    # Execute SQL to update data in mytable
+    # Execute SQL to update data in the appropriate table
     cursor.execute(sql_update_query, val)
     con.commit()
 
     print("Record Updated")
     cursor.close()
 
-
-
-# Delete a record from mytable
+# Delete a record from the appropriate table
 def delete(con):
     cursor = con.cursor()
+    student_type = input("Enter student type (T for Transferee, A for Admitted, S for Shifter): ").upper()
+
+    if student_type == 'T':
+        table_name = 'transfer_students'
+    elif student_type == 'A':
+        table_name = 'admitted_students'
+    elif student_type == 'S':
+        table_name = 'shifters'
+    else:
+        print("Invalid student type. Please enter T, A, or S.")
+        return
+
     code_to_delete = int(input("Enter Student Code to Delete: "))
     
-    # Execute SQL to delete data from mytable
-    sql = "DELETE FROM mytable WHERE student_code = %s"
+    # Execute SQL to delete data from the appropriate table
+    sql = f"DELETE FROM {table_name} WHERE student_code = %s"
     val = (code_to_delete,)
     
     cursor.execute(sql, val)
@@ -127,10 +173,22 @@ def delete(con):
     print("Record Deleted")
     cursor.close()
 
-# Shows all records
+# Shows all records in the appropriate table
 def show_all_records(con):
     cursor = con.cursor()
-    sql = "SELECT * FROM mytable"
+    student_type = input("Enter student type (T for Transferee, A for Admitted, S for Shifter): ").upper()
+
+    if student_type == 'T':
+        table_name = 'transfer_students'
+    elif student_type == 'A':
+        table_name = 'admitted_students'
+    elif student_type == 'S':
+        table_name = 'shifters'
+    else:
+        print("Invalid student type. Please enter T, A, or S.")
+        return
+
+    sql = f"SELECT * FROM {table_name}"
     cursor.execute(sql)
     records = cursor.fetchall()
 
